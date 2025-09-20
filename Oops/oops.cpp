@@ -3,17 +3,7 @@
 
 using namespace std;
 
-/*
-Dynamic Polymorphism in real life says that 2 Objects coming from same
-family will respond to same stimulus differently. Like in real world Manual
-car and Electric car will respond to accelerate() differently.
-
-To represent this in programming, we create a parent class that defines all
-characters and behaviours that are generic to all child classes and are also same in
-all child classes but make those methods abstract(virtual) that are generic to all
-child classes but all child class will behave differently. Then those child class
-will provide implementation details of these abstract methods the way they want.
-*/ 
+// Base Car class
 class Car {
 protected:
     string brand;
@@ -42,7 +32,11 @@ public:
     }
 
     virtual void accelerate() = 0;  // Abstract method for Dynamic Polymorphism
+
+    virtual void accelerate(int speed) = 0;  //Abstract method for Static Polymorphism
+
     virtual void brake() = 0;       // Abstract method for Dynamic Polymorphism
+    
     virtual ~Car() {}               // Virtual destructor
 };
 
@@ -68,6 +62,16 @@ public:
             return;
         }
         currentSpeed += 20;
+        cout << brand << " " << model << " : Accelerating to " << currentSpeed << " km/h" << endl;
+    }
+
+    //overriding and overloading accelerate at the same time.
+    void accelerate(int speed) {
+        if (!isEngineOn) {
+            cout << brand << " " << model << " : Cannot accelerate! Engine is off." << endl;
+            return;
+        }
+        currentSpeed += speed;
         cout << brand << " " << model << " : Accelerating to " << currentSpeed << " km/h" << endl;
     }
 
@@ -109,6 +113,21 @@ public:
         cout << brand << " " << model << " : Accelerating to " << currentSpeed << " km/h. Battery at " << batteryLevel << "%." << endl;
     }
 
+    // Overriding accelerate - Dynamic Polymorphism
+    void accelerate(int speed) {
+        if (!isEngineOn) {
+            cout << brand << " " << model << " : Cannot accelerate! Engine is off." << endl;
+            return;
+        }
+        if (batteryLevel <= 0) {
+            cout << brand << " " << model << " : Battery dead! Cannot accelerate." << endl;
+            return;
+        }
+        batteryLevel -= 10 + speed;
+        currentSpeed += speed;
+        cout << brand << " " << model << " : Accelerating to " << currentSpeed << " km/h. Battery at " << batteryLevel << "%." << endl;
+    }
+
     // Overriding brake - Dynamic Polymorphism
     void brake() {
         currentSpeed -= 15;
@@ -117,10 +136,9 @@ public:
     }
 };
 
-
 // Main function
 int main() {
-    Car* myManualCar = new ManualCar("Suzuki", "WagonR");
+    Car* myManualCar = new ManualCar("Ford", "Mustang");
     myManualCar->startEngine();
     myManualCar->accelerate();
     myManualCar->accelerate();

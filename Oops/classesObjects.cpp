@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
 // Define a class named 'Car'
@@ -10,7 +11,7 @@ public:
     int year;
 
     // Constructor
-    Car(string b, string m, int y) {
+    Car(const string& b, const string& m, int y) {
         brand = b;
         model = m;
         year = y;
